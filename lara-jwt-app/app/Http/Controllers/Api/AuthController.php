@@ -10,7 +10,7 @@ use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
-   public function register(Request $request){
+    public function register(Request $request){
         $request->validate([
             'name'=>'required|max:255',
             'email'=>'required|email|unique:users,email',
@@ -37,7 +37,14 @@ class AuthController extends Controller
             ],401);     
         }else{
             if(Hash::check($request->password,$user->password)){
-                $token =JWTAuth::fromUser($user);       //fromUser
+                // $token =JWTAuth::fromUser($user);       //fromUser buildin //another way down for custom
+                
+                $custom = time() + (5);
+                $token = JWTAuth::claims([
+                    'exp'=>$custom,
+                    'user-name'=>$user->name,
+                ])->fromUser($user);
+
                 return response()->json([
                     'success'=>true,
                     'message'=>'login SuccessFull.',
