@@ -1,0 +1,31 @@
+1.jwt indatll
+============================
+composer require php-open-source-saver/jwt-auth
+
+2.publish and provider
+=================================
+php artisan vendor:publish --provider="PHPOpenSourceSaver\JWTAuth\Providers\LaravelServiceProvider"
+
+3.secret key as your wise
+=======================
+php artisan jwt:secret
+
+4.than implemet JWTSUBJECT to  user model include 2 function below:
+=================================
+ class User extends Authenticatable implements JWTSubject
+{
+    use Notifiable;
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey(); // user id
+    }
+
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
+}
+
+.5
+
